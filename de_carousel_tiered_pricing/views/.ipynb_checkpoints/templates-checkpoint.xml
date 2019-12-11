@@ -1,0 +1,24 @@
+<odoo>
+    <!-- product carousel tiered pricing -->
+    <template id="de_website_show_contact_price_product_carousel" inherit_id="website_product_carousel.rendering_product_item">
+        <xpath expr="//div[@itemprop='offers']" position="before">
+<!-- custom code for pricing -->    
+<!--
+            <span t-field="product.id"/>
+            <t t-foreach="product.item_ids" t-as="item">
+                    <t t-esc="item.min_quantity"/>
+                
+            </t>
+-->
+            <t t-set="website_sale_pricelists" t-value="website.get_current_pricelist()"/>
+                <t t-foreach="website_sale_pricelists" t-as="pricelist">
+                    <t t-foreach="pricelist.item_ids" t-as="offer">
+                        <t t-if="offer.product_tmpl_id.id==product.id">
+                            <div>&lt; <t t-esc="offer.min_quantity"/> Units - <t t-if="offer.compute_price=='percentage'"><t t-esc="offer.percent_price"/></t><t t-elif="offer.compute_price=='fixed'"><t t-esc="offer.fixed_price"/></t><t t-elif="offer.compute_price=='formula'"><t t-esc="offer.price_on_basepricelist"/></t>/ea
+                            </div>                                  
+                      </t>
+                </t>
+            </t>
+        </xpath>
+    </template>
+</odoo>
