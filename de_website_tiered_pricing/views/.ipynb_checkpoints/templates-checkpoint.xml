@@ -1,0 +1,36 @@
+<odoo>
+    <data>
+        <template id="de_website_hide_price_products_item" inherit_id="website_sale.products_item" >
+        <xpath expr="//div[@itemprop='offers']" position="before">
+            <t t-set="website_sale_pricelists" t-value="website.get_current_pricelist()"/>
+                <t t-foreach="website_sale_pricelists" t-as="pricelist">
+                    <t t-foreach="pricelist.item_ids" t-as="offer">
+                        <t t-if="offer.product_tmpl_id.id==product.id">
+                            <div>&lt; <t t-esc="offer.min_quantity"/> Units - <t t-if="offer.compute_price=='percentage'"><t t-esc="offer.percent_price"/></t><t t-elif="offer.compute_price=='fixed'"><t t-esc="offer.fixed_price"/></t><t t-elif="offer.compute_price=='formula'"><t t-esc="offer.price_on_basepricelist"/></t>/ea
+                            </div>                                  
+                      </t>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+        <!-- <template id="listing"> -->
+        <!--   <ul> -->
+        <!--     <li t-foreach="objects" t-as="object"> -->
+        <!--       <a t-attf-href="#{ root }/objects/#{ object.id }"> -->
+        <!--         <t t-esc="object.display_name"/> -->
+        <!--       </a> -->
+        <!--     </li> -->
+        <!--   </ul> -->
+        <!-- </template> -->
+        <!-- <template id="object"> -->
+        <!--   <h1><t t-esc="object.display_name"/></h1> -->
+        <!--   <dl> -->
+        <!--     <t t-foreach="object._fields" t-as="field"> -->
+        <!--       <dt><t t-esc="field"/></dt> -->
+        <!--       <dd><t t-esc="object[field]"/></dd> -->
+        <!--     </t> -->
+        <!--   </dl> -->
+        <!-- </template> -->
+    </data>
+</odoo>
