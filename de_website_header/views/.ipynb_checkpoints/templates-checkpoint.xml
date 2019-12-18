@@ -89,13 +89,16 @@
                 </div>
             </section>
             </xpath>
+            <!--
             <xpath expr="//header//a[hasclass('navbar-brand')]" position="replace">
                 <span></span>
             </xpath>
+-->
         </template>
         <!-- add black  space in menu bar -->
-        <template id="header" inherit_id="website.layout" name="blank menu">
-            <xpath expr="//header//ul[@id='top_menu']/li[@id='my_cart']" position="before">
+<!--        
+        <template id="header" inherit_id="web.layout" name="blank menu">
+            <xpath expr="ul[@id='top_menu']/li[hasclass('o_wsale_my_cart')]" position="before">
                 <li id="blank-nav-item" class="nav-item blank-nav-item" >
                     
                 </li>
@@ -106,6 +109,6 @@
                 </li>
             </xpath>
         </template>
-        
+-->        
     </data>
 </odoo>

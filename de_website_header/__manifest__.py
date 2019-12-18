@@ -20,7 +20,7 @@
     'version': '1.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','website','ct_searchbar_in_menu'],
+    'depends': ['base','website'],
 
     # always loaded
     'data': [
