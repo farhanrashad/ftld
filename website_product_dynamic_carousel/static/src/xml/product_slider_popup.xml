@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="product_slider_templates" xml:space="preserve">
+    <t t-name="website_product_dynamic_carousel.p_slider_popup_template">
+        <div class="p_slider_panel modal o_technical_modal fade dialog_box_popup product-slider-info" role="dialog" id="product_slider_modal">
+            <div class="modal-content modal-dialog">
+                <div class="modal-header">
+                    <h4>Configure Product Slider</h4>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="ti-close"/>
+                    </button>
+                </div>
+                <div class="o_product_slider_panel_content modal-body">
+                    <div class="o_product_slider_config_details">
+                        <form class="form-horizontal container-fluid" role="form">
+                            <div class="row form-group align-items-center">
+                                <label for="slider_type" class="col-sm-3 m-0 control-label">Slider Type</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="slider_type">
+                                        <option value="single">Single Tab Snippets</option>
+                                        <option value="multi">Multi Tab Snippets</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row align-items-center form-group s_tab_collection_container">
+                                <label for="s_tab_layout" class="col-sm-3 m-0 control-label">Layout</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="s_tab_layout">
+                                        <option value="slider">Slider</option>
+                                        <option value="fw_slider">Full Width Slider</option>
+                                        <option value="slider_img_left">Grid With Image</option>
+                                        <option value="grid">Grid</option>
+                                        <option value="fw_grid">Full Width Grid</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row align-items-center form-group m_tab_collection_container">
+                                <label for="m_tab_layout" class="col-sm-3 m-0 control-label">Layout</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="m_tab_layout">
+                                        <option value="horiz_tab">Horizontal Tab Layout</option>
+                                        <option value="vertic_tab">Vertical Tab Layout</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row align-items-center form-group s_tab_collection_container">
+                                <label for="s_tab_collection" class="col-sm-3 m-0 control-label">Collection</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="s_tab_collection"/>
+                                </div>
+                            </div>
+                            <div class="row align-items-center form-group m_tab_collection_container">
+                                <label for="m_tab_collection" class="col-sm-3 m-0 control-label">Collection</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="m_tab_collection"/>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="row align-items-center form-group prod_count">
+                                <label for="product-count" class="col-sm-3 m-0 control-label">Products Per Slide</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" id="prod-count" placeholder="Enter Count" name="prod-count"/>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-3"/>
+                                <div class="col-sm-9">
+                                    <div class="row">
+                                        <div class="col-md-6 auto_load">
+                                            <input type="checkbox" id="prod-auto"/>
+                                            <label for="slider-autoplay" class="control-label m-0px">Autoplay</label>
+                                        </div>
+                                        <div class="col-md-6 prod_name">
+                                            <input type="checkbox" id="prod-name"/>
+                                            <label for="prod-name" 
+                                            class="control-label m-0px">Product Name</label>
+                                        </div>
+                                        <div class="col-md-6 prod-price">
+                                            <input type="checkbox" id="prod-price"/>
+                                            <label for="prod-price" 
+                                            class="control-label m-0px">Product Price</label>
+                                        </div>
+                                        <div class="col-md-6 prod-cart">
+                                            <input type="checkbox" id="prod-cart"/>
+                                            <label for="prod-cart" 
+                                            class="control-label m-0px">Add to Cart</label>
+                                        </div>
+                                        <div class="col-md-6 prod-quick_view">
+                                            <input type="checkbox" id="prod-quick_view"/>
+                                            <label for="prod-quick_view" class="control-label m-0px">Quick View</label>
+                                        </div>
+                                        <div class="col-md-6 prod-rating">
+                                            <input type="checkbox" id="prod-rating"/>
+                                            <label for="prod-rating" 
+                                            class="control-label m-0px">Rating</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p_slider_sample_view" style="padding-left: calc(25% + 10px);">
+                                <img class="snip_sample_img" src="website_product_dynamic_carousel/static/src/img/snippets/slider.png"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn_close" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary btn_apply" data-dismiss="modal">Apply</button>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

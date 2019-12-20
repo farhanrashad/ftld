@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_multitab_configure,multitab.configure,model_multitab_configure,,1,1,1,1
+access_collection_configure,collection.configure,model_collection_configure,,1,1,1,1
+access_product_tab_products,tab.products.all,model_tab_products,,1,1,1,1

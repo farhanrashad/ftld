@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Assets -->
+    <template id="assets_editor_product_slider" inherit_id="website.assets_editor" name="Editor assets">
+        <xpath expr="." position="inside">
+            <script src="/website_product_dynamic_carousel/static/src/js/website.editor.js" type="text/javascript" />
+        </xpath>
+    </template>
+    <template id="assent_front_product" inherit_id="website.assets_frontend">
+        <xpath expr="." position="inside">
+            <script src="/website_product_dynamic_carousel/static/src/js/website.front.js" type="text/javascript" />
+        </xpath>
+    </template>
+    <!--  -->
+    <!-- Snippet Definition -->
+    <template id="s_product_slider" name="Product Dynamic Snippet">
+        <section class="s_product_slider" data-snippet_type="0" data-collection_id="0" data-collection_name="NO COLLECTION SELECTED" data-snippet_layout="0">
+            NO COLLECTION SELECTED
+        </section>
+    </template>
+    <!--  -->
+    <!-- Snippet Options -->
+    <template id="s_product_slider_options" name="Product Slider Snippet Options" inherit_id="website.snippet_options">
+        <xpath expr="." position="inside">
+            <div data-js="product_slider_actions" 
+            data-selector=".s_product_slider">
+                <we-button data-product_slider_configure="" data-no-preview="true">Modify</we-button>
+            </div>
+        </xpath>
+    </template>
+    <!--  -->
+    <!-- Snippets to Website -->
+    <template id="product_slider_in_feature" name="Product Slider Snippet in Feature" inherit_id="website.snippets">
+        <xpath expr="//div[@id='snippet_feature']/div[hasclass('o_panel_body')]" position="inside">
+            <t t-snippet="website_product_dynamic_carousel.s_product_slider" t-thumbnail="/website_product_dynamic_carousel/static/src/icon/product_dynamic_snippet.png" />
+        </xpath>
+    </template>
+    <!--  -->
+    <!-- Snippet Content -->
+    <!-- Single Tab Snippets -->
+    <template id="asp_inner" name="ASP inner">
+        <t t-set="combination_info" t-value="product._get_combination_info(only_template=True, add_qty=add_qty or 1, pricelist=pricelist)"/>
+
+        <div class="asp-inner">
+            <div class="pro-img">
+                <a t-attf-href="/shop/product/#{slug(product)}">
+                    <img alt="" t-att-src="website.image_url(product, 'image_512')" title="" />
+                </a>
+            </div>
+            <div class="pro-info">
+                <t t-if="prod_name">
+                    <div class="pro-name">
+                        <a t-attf-href="/shop/product/#{slug(product)}">
+                            <t t-esc="product.name" />
+                        </a>
+                    </div>
+                </t>
+                <t t-if="request.website.viewref('website_sale.product_comment').active">
+                    <t t-if="prod_rating">
+                        <div t-set="rating_avg_val" t-value="round(product.rating_get_stats().get('avg')) / 2" />
+                        <div class="prod_rating">
+                            <t t-set="curr_rate" t-value="0" />
+                            <t t-set="half_flag" t-value="0" />
+                            <t t-foreach="range(0, 5)" t-as="each_rate">
+                                <t t-set="curr_rate" t-value="curr_rate + 1" />
+                                <t t-if="curr_rate &lt;= int(rating_avg_val // 1)">
+                                    <i class="fa fa-star" />
+                                </t>
+                                <t t-else="">
+                                    <t t-if="rating_avg_val % 1 == 0.5 and half_flag == 0">
+                                        <i class="fa fa-star-half-o" />
+                                        <t t-set="half_flag" t-value="1" />
+                                    </t>
+                                    <t t-else="">
+                                        <i class="fa fa-star-o" />
+                                    </t>
+                                </t>
+                            </t>
+                            <span t-esc="str(rating_avg_val) + ' / 5'" />
+                        </div>
+                    </t>
+                </t>
+                <t t-if="prod_price">
+                    <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price mt16">
+                        <del t-attf-class="text-danger mr-2 {{'' if combination_info['has_discounted_price'] else 'd-none'}}" style="white-space: nowrap;" t-esc="combination_info['list_price']" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                        <span t-if="combination_info['price']" t-esc="combination_info['price']" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                        <span itemprop="price" style="display:none;" t-esc="combination_info['price']" />
+                        <span itemprop="priceCurrency" style="display:none;" t-esc="website.currency_id.name" />
+                    </div>
+                </t>
+                <div class="pro-icons">
+                    <t t-if="prod_quick_view">
+                        <a type="button" title="Quick View" class="btn btn-primary o_quick_view" t-att-data-product_template_id="product.id" data-toggle="modal" data-target="#my_quick_view_modal" data-action="o_quick_view">
+                            <span class="fa fa-eye"></span>
+                        </a>
+                    </t>
+                    <t t-if="request.website.viewref('website_sale.products_add_to_cart').active">
+                        <t t-if="prod_cart">
+                            <form action="/shop/cart/update" method="post">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+                                <t t-set="product_variant_id" t-value="product._get_first_possible_variant_id()"/>
+                                <input name="product_id" t-att-value="product_variant_id" type="hidden"/>
+                                <t t-if="product_variant_id">
+                                    <button class="button btn btn-cart">
+                                        <span class="fa fa-shopping-cart"></span>
+                                        <span>ADD TO CART</span>
+                                    </button>
+                                </t>
+                            </form>
+                        </t>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </template>
+    <!-- Product Slider -->
+    <template name="Product Slider" id="product_slider_content">
+        <div t-att-class="'container%sprod_slider'%('-fluid fw_' if full_width else ' ')" contentEditable="false">
+            <div class="quality_product_slide">
+                <t t-if="product_collection">
+                    <div class="seaction-head d-flex align-items-center flex-wrap no-gutters">
+                        <h2>
+                            <t t-esc="product_collection.name" />
+                        </h2>
+                        <div class="single-slider2-see_all ml-auto col-12 col-md-auto">
+                            <a t-att-href="'/shop/product_collection/%s' % slug(product_collection)">See All Products</a>
+                        </div>
+                    </div>
+                </t>
+                <t t-if="product_collection">
+                    <t t-set="products" t-value="product_collection.product_ids.sudo().filtered(lambda p: p.product_id.website_published)"/>
+                    <t t-if="limit">
+                        <t t-set="products" t-value="products[:int(limit)]"/>
+                    </t>
+                </t>
+                <div t-attf-class="tqt-pro-slide owl-carousel" t-if="products">
+                    <t t-foreach="products" t-as="product_x">
+                        <div class="as-product">
+                            <t t-set="product" t-value="product_x.product_id" />
+                            <t t-call="website_product_dynamic_carousel.asp_inner" />
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </template>
+    <!--  -->
+    <!-- Product Slider with Image -->
+    <template id="product_slider_2_content" name="">
+        <section class="category-product-snippet prod_slider_img_left">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="p-slider2-head_block" t-att-style="'background-image: url(%s)' %(website.image_url(product_collection, 'image'),)">
+                            <div class="p-slider2-section_name" t-esc="product_collection.name" />
+                            <div class="p-slider2-see_all">
+                                <a t-att-href="'/shop/product_collection/%s' % slug(product_collection)">See All Products</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="p-slider-content_block oe_website_sale row">
+                            <t t-set="products" t-value="product_collection.product_ids.sudo().filtered(lambda p: p.product_id.website_published)"/>
+                            <t t-if="products">
+                                <t t-foreach="products" t-as="each_prod_line">
+                                    <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
+                                        <div class="as-product">
+                                            <t t-set="product" t-value="each_prod_line.product_id" />
+                                            <t t-call="website_product_dynamic_carousel.asp_inner" />
+                                        </div>
+                                    </div>
+                                </t>
+                            </t>
+                            <t t-else="">
+                                NO PRODUCTS AVAILABLE
+                            </t>
+                        </div>
+                    </div>
+                </div>
+                <!-- row -->
+            </div>
+        </section>
+    </template>
+    <!--  -->
+    <!-- Product Grid -->
+    <template id="latest_p_content" name="Product Content">
+        <t t-if="product_collection">
+            <div t-att-class="'container%sprod_grid'%('-fluid fw_' if full_width else ' ',)">
+                <div class="seaction-head">
+                    <h2 t-esc="product_collection.name" />
+                </div>
+                <t t-set="products" t-value="product_collection.product_ids.sudo().filtered(lambda p: p.product_id.website_published)"/>
+                <div class="row" t-if="products">
+                    <t t-set="curr_count" t-value="0" />
+                    <t t-foreach="products" t-as="each_tab_prod_line">
+                        <t t-set="curr_count" t-value="curr_count + 1" />
+                        <t t-if="curr_count &lt;= 15">
+                            <div class="col-12 col-md-4 col-lg-3 col-sm-6 prod-grid-col">
+                                <div class="as-product">
+                                    <t t-set="product" t-value="each_tab_prod_line.product_id" />
+                                    <t t-call="website_product_dynamic_carousel.asp_inner" />
+                                </div>
+                            </div>
+                            <!-- col -->
+                        </t>
+                    </t>
+                    <!-- Product Data here -->
+                </div>
+                <!-- row -->
+            </div>
+            <!-- container -->
+        </t>
+    </template>
+    <!--  -->
+    <!--  -->
+    <!-- Multi Tab Snippets -->
+    <!-- Horizontal Tab Snippet -->
+    <template id="website_product_dynamic_carousel.snippet_products_item" name="Product Items">
+        <t t-set="combination_info" t-value="product._get_combination_info(only_template=True, add_qty=add_qty or 1, pricelist=pricelist)"/>
+
+        <form action="/shop/cart/update" method="post" class="as-product">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+            <div itemscope="itemscope" itemtype="http://schema.org/Product" class="asp-inner">
+                <div class="pro-img oe_product_image">
+                    <a class="preview-image" itemprop="url" t-att-href="'/shop/product/%s' % slug(product)">
+                        <span class="product-img" itemprop="image" t-att-alt="product.name" t-field="product.image_512" t-options="{'widget': 'image', 'preview_image': 'image_512'}" />
+                    </a>
+                </div>
+                <div class="pro-info">
+                    <t t-if="prod_name">
+                        <div class="pro-name">
+                            <a itemprop="name" t-att-href="'/shop/product/%s' % slug(product)" t-field="product.name" />
+                        </div>
+                    </t>
+                    <t t-if="request.website.viewref('website_sale.product_comment').active">
+                        <t t-if="prod_rating">
+                            <div t-set="rating_avg_val" t-value="round(product.rating_get_stats().get('avg')) / 2" />
+                            <div class="prod_rating">
+                                <t t-set="curr_rate" t-value="0" />
+                                <t t-set="half_flag" t-value="0" />
+                                <t t-foreach="range(0, 5)" t-as="each_rate">
+                                    <t t-set="curr_rate" t-value="curr_rate + 1" />
+                                    <t t-if="curr_rate &lt;= int(rating_avg_val // 1)">
+                                        <i class="fa fa-star" />
+                                    </t>
+                                    <t t-else="">
+                                        <t t-if="rating_avg_val % 1 == 0.5 and half_flag == 0">
+                                            <i class="fa fa-star-half-o" />
+                                            <t t-set="half_flag" t-value="1" />
+                                        </t>
+                                        <t t-else="">
+                                            <i class="fa fa-star-o" />
+                                        </t>
+                                    </t>
+                                </t>
+                                <span t-esc="str(rating_avg_val) + ' / 5'" />
+                            </div>
+                        </t>
+                    </t>
+                    <t t-if="prod_price">
+                        <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price mt16">
+                            <del t-attf-class="text-danger mr-2 {{'' if combination_info['has_discounted_price'] else 'd-none'}}" style="white-space: nowrap;" t-esc="combination_info['list_price']" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                            <span t-if="combination_info['price']" t-esc="combination_info['price']" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                            <span itemprop="price" style="display:none;" t-esc="combination_info['price']" />
+                            <span itemprop="priceCurrency" style="display:none;" t-esc="website.currency_id.name" />
+                        </div>
+                    </t>
+                    <div class="pro-icons">
+                        <t t-if="prod_quick_view">
+                            <a type="button" title="Quick View" class="btn btn-primary o_quick_view" t-att-data-product_template_id="product.id" data-toggle="modal" data-target="#my_quick_view_modal" data-action="o_quick_view">
+                                <span class="fa fa-eye"></span>
+                            </a>
+                        </t>
+                        <t t-if="request.website.viewref('website_sale.products_add_to_cart').active">
+                            <t t-if="prod_cart">
+                                <t t-set="product_variant_id" t-value="product._get_first_possible_variant_id()"/>
+                                <input name="product_id" t-att-value="product_variant_id" type="hidden"/>
+                                <t t-if="product_variant_id">
+                                    <button class="button btn btn-cart">
+                                        <span class="fa fa-shopping-cart"></span>
+                                        <span>ADD TO CART</span>
+                                    </button>
+                                </t>
+                            </t>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </template>
+    <template id="website_product_dynamic_carousel.s_collection_configure" name="Collection coursol">
+        <div class="container h_tab_prod_snip" t-if="obj" contentEditable="false">
+            <div class="product_slide">
+                <div class="seaction-head">
+                    <h2 t-field="obj.name" />
+                </div>
+            </div>
+            <div class="multi_tab_slider">
+                <t t-if="obj and obj.tab_collection_ids">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <t t-foreach="obj.tab_collection_ids" t-as="collection">
+                            <li class="nav-item" role="presentation">
+                                <a t-att-class="'nav-link active' if obj.tab_collection_ids[0].id==collection.id else 'nav-link'" t-att-href="'#more_info_%s' %(collection.id)" aria-controls="more_info" role="tab" data-toggle="tab">
+                                    <t t-esc="collection.name" />
+                                </a>
+                            </li>
+                        </t>
+                    </ul>
+                    <div class="tab-content">
+                        <t t-foreach="obj.tab_collection_ids" t-as="collection">
+                            <div role="tabpanel" t-att-class="'tab-pane active' if obj.tab_collection_ids[0].id==collection.id else 'tab-pane'" t-att-id="'more_info_%s' %(collection.id)">
+                                <div class="multiHorizontal-slider-see_all single-slider2-see_all">
+                                    <a t-att-href="'/shop/product_collection/%s' % slug(collection)">See All Products</a>
+                                </div>
+                                <t t-set="products" t-value="collection.product_ids.sudo().filtered(lambda p: p.product_id.website_published)"/>
+                                <t t-if="products">
+                                    <div class="owl-carousel thumbnails-slides multi_slider">
+                                        <t t-foreach="products" t-as="product_x">
+                                            <t t-set="product" t-value="product_x.product_id" />
+                                            <t t-call="website_product_dynamic_carousel.snippet_products_item" />
+                                        </t>
+                                    </div>
+                                </t>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </template>
+    <!--  -->
+    <!-- Vertical Tab Snippet -->
+    <template id="website_product_dynamic_carousel.snippet_products_item_list" name="Product Items">
+
+        <t t-set="combination_info" t-value="product._get_combination_info(only_template=True, add_qty=add_qty or 1, pricelist=pricelist)"/>
+
+        <form action="/shop/cart/update" method="post" class="as-v-product">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+            <div itemscope="itemscope" itemtype="http://schema.org/Product" class="asp-v-inner v_tab_prod_snip">
+                <div class="pro-img oe_product_image">
+                    <a class="preview-image" itemprop="url" t-att-href="'/shop/product/%s' % slug(product)">
+                        <span class="product-img" itemprop="image" t-att-alt="product.name" t-field="product.image_512" t-options="{'widget': 'image', 'preview_image': 'image_512'}" />
+                    </a>
+                </div>
+                <div class="pro-info">
+                    <t t-if="prod_name">
+                        <div class="pro-name">
+                            <a itemprop="name" t-att-href="'/shop/product/%s' % slug(product)" t-field="product.name" />
+                        </div>
+                    </t>
+                    <t t-if="request.website.viewref('website_sale.product_comment').active">
+                        <t t-if="prod_rating">
+                            <div t-set="rating_avg_val" t-value="round(product.rating_get_stats().get('avg')) / 2" />
+                            <div class="prod_rating">
+                                <t t-set="curr_rate" t-value="0" />
+                                <t t-set="half_flag" t-value="0" />
+                                <t t-foreach="range(0, 5)" t-as="each_rate">
+                                    <t t-set="curr_rate" t-value="curr_rate + 1" />
+                                    <t t-if="curr_rate &lt;= int(rating_avg_val // 1)">
+                                        <i class="fa fa-star" />
+                                    </t>
+                                    <t t-else="">
+                                        <t t-if="rating_avg_val % 1 == 0.5 and half_flag == 0">
+                                            <i class="fa fa-star-half-o" />
+                                            <t t-set="half_flag" t-value="1" />
+                                        </t>
+                                        <t t-else="">
+                                            <i class="fa fa-star-o" />
+                                        </t>
+                                    </t>
+                                </t>
+                                <span t-esc="str(rating_avg_val) + ' / 5'" />
+                            </div>
+                        </t>
+                    </t>
+                    <t t-if="prod_price">
+                        <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price mt16">
+                            <del t-attf-class="text-danger mr-2 {{'' if combination_info['has_discounted_price'] else 'd-none'}}" style="white-space: nowrap;" t-esc="combination_info['list_price']" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                            <span t-if="combination_info['price']" t-esc="combination_info['price']" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                            <span itemprop="price" style="display:none;" t-esc="combination_info['price']" />
+                            <span itemprop="priceCurrency" style="display:none;" t-esc="website.currency_id.name" />
+                        </div>
+                    </t>
+                    <div class="pro-icons">
+                        <t t-if="request.website.viewref('website_sale.products_add_to_cart').active">
+                            <t t-if="prod_cart">
+                                <t t-set="product_variant_id" t-value="product._get_first_possible_variant_id()"/>
+                                <input name="product_id" t-att-value="product_variant_id" type="hidden"/>
+                                <t t-if="product_variant_id">
+                                    <button class="button btn btn-cart">ADD TO CART</button>
+                                </t>
+                            </t>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </template>
+    <template id="website_product_dynamic_carousel.product_tab_content" name="Collection coursol">
+        <div class="container multi_product v_tab_prod_snip" t-if="obj" contentEditable="false">
+            <div class="product_slide" t-if="obj">
+                <div class="seaction-head">
+                    <h2 t-field="obj.name" />
+                </div>
+            </div>
+            <div class="product_tab_content" t-if="obj.tab_collection_ids">
+                <div class="multi_tab_slider row">
+                    <t t-foreach="obj.tab_collection_ids" t-as="collection">
+                        <t t-set="len_p" t-value="len(obj.tab_collection_ids)" />
+                        <div t-attf-class=" product_detail #{len_p==1 and 'col-md-12' or ''} #{len_p==2 and 'col-md-6' or ''} #{len_p==3 and 'col-md-4' or ''} #{len_p&gt;=4 and 'col-md-3' or ''}">
+                            <div class="flex-wrap d-flex mt-filter-title">
+                                <h2 class="filter_title" t-field="collection.name" />
+                                <div class="single-slider2-see_all ml-auto">
+                                    <a t-att-href="'/shop/product_collection/%s' % slug(collection)">See All</a>
+                                </div>
+                            </div>
+                            <div id="vertical_slide" class="filter_value owl-carousel thumbnails-slides multi_slider" t-if="collection.product_ids">
+                                <t t-set="max_qty" t-value="0" />
+                                <t t-set="products" t-value="collection.product_ids.sudo().filtered(lambda p: p.product_id.website_published)"/>
+                                <t t-foreach="products" t-as="product_x">
+                                    <t t-if="max_qty&lt;=1">
+                                        <div class="item" t-foreach="[products[x:x+prod_count] for x in range(0, len(products), prod_count)]" t-as="page_docs">
+                                            <div t-foreach="page_docs" t-as="prod" class="slider_product">
+                                                <t t-set="product" t-value="prod.product_id" />
+                                                <t t-call="website_product_dynamic_carousel.snippet_products_item_list" />
+                                                <t t-set="max_qty" t-value="max_qty+1" />
+                                            </div>
+                                        </div>
+                                    </t>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </template>
+</odoo>
