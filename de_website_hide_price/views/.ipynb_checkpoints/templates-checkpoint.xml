@@ -3,7 +3,7 @@
     <template id="de_website_show_contact_price_product_detail" inherit_id="website_sale.product">
         <xpath expr="//a[@id='add_to_cart']" position="after">
             <div groups="base.group_public" class="s_btn text-center pt16 pb16" data-name="Buttons">
-                <a href="/register" class="btn btn-beta flat btn-sm">Contact for Price</a>
+                <a href="/register" class="btn btn-beta flat btn-sm">Register for Price</a>
             </div>
         </xpath>
         <xpath expr="//a[@id='add_to_cart']" position="attributes">
@@ -19,13 +19,29 @@
             </attribute>
         </xpath>
     </template>
-    <!-- Product Grid/Product item Page -->
+    
+    <template id="de_website_show_hide_buy_now" inherit_id="website_sale.product_buy_now">
+        <xpath expr="//a[@id='buy_now']" position="attributes">
+            <attribute name="groups">
+                base.group_user, base.group_portal
+            </attribute>
+        </xpath>
+    </template>
+
+    
+    <!-- Product Grid/Product shop Page -->
     <template id="de_website_hide_price_products_item" inherit_id="website_sale.products_item" >
         <xpath expr="//div[@itemprop='offers']" position="after">
             <div groups="base.group_public" class="s_btn text-center pt16 pb16" data-name="Buttons">
-                <a href="/register" class="btn btn-beta flat btn-sm">Contact for Price</a>
+                <a href="/register" class="btn btn-beta flat btn-sm">Register for Price</a>
             </div>
         </xpath>
+         <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="attributes">
+            <attribute name="groups">
+                base.group_user, base.group_portal
+            </attribute>
+        </xpath>
+        
         <xpath expr="//div[@itemprop='offers']" position="attributes">
             <attribute name="groups">
                 base.group_user, base.group_portal
@@ -33,6 +49,28 @@
         </xpath>
     </template>
      
+    <!-- Product carousel  -->
+    <template id="de_website_hide_price_products_item_carousel_icons"  inherit_id="website_product_dynamic_carousel.snippet_products_item" >
+        <xpath expr="//div[hasclass('pro-icons')]" position="attributes">
+            <attribute name="groups">
+                base.group_user, base.group_portal
+            </attribute>
+        </xpath>
+    </template>
+    
+    <template id="de_website_hide_price_products_item_carousel"  inherit_id="website_product_dynamic_carousel.snippet_products_item" >
+        <xpath expr="//div[@itemprop='offers']" position="before">
+            <div groups="base.group_public" class="s_btn text-center pt16 pb16" data-name="Buttons">
+                <a href="/register" class="btn btn-beta flat btn-sm">Register for Price</a>
+            </div>
+        </xpath>
+        <xpath expr="//div[@itemprop='offers']" position="attributes">
+            <attribute name="groups">
+                base.group_user, base.group_portal
+            </attribute>
+        </xpath>
+        
+    </template>
     
 <!--    
     

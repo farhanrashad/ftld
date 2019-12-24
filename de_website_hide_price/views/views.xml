@@ -4,7 +4,7 @@
         <field name="name">crm.case.form.view.oppor.inherit</field>
         <field name="model">crm.lead</field>
         <field name="type">form</field>
-        <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='partner_name']" position="before">
                 <field name="business_type"/>
@@ -16,7 +16,7 @@
         <field name="name">crm.case.form.view.leads.inherit</field>
         <field name="model">crm.lead</field>
         <field name="type">form</field>
-        <field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/label[1]" position="before">
                 <field name="business_type"/>

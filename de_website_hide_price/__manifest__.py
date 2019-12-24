@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','website_sale','website_product_carousel','crm'],
+    'depends': ['base','website_sale','website_product_dynamic_carousel','website_crm'],
 
     # always loaded
     'data': [
