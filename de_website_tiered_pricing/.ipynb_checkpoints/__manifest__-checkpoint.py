@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Website Prices",
+    'name': "Website Tiered Pricing",
 
     'summary': """
         Display all prices rules""",
@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','website_sale'],
+    'depends': ['base','website_sale','website_product_dynamic_carousel'],
 
     # always loaded
     'data': [
