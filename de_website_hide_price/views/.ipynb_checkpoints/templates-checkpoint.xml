@@ -18,6 +18,11 @@
                 base.group_user, base.group_portal
             </attribute>
         </xpath>
+        <xpath expr="//table[hasclass('pro-tiered-pricing')]" position="attributes">
+            <attribute name="groups">
+                base.group_user, base.group_portal
+            </attribute>
+        </xpath>
     </template>
     
     <template id="de_website_show_hide_buy_now" inherit_id="website_sale.product_buy_now">
@@ -37,6 +42,12 @@
             </div>
         </xpath>
          <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="attributes">
+            <attribute name="groups">
+                base.group_user, base.group_portal
+            </attribute>
+        </xpath>
+        
+        <xpath expr="//div[hasclass('pro-tiered-pricing')]" position="attributes">
             <attribute name="groups">
                 base.group_user, base.group_portal
             </attribute>
@@ -65,6 +76,12 @@
             </div>
         </xpath>
         <xpath expr="//div[@itemprop='offers']" position="attributes">
+            <attribute name="groups">
+                base.group_user, base.group_portal
+            </attribute>
+        </xpath>
+        
+        <xpath expr="//div[hasclass('pro-tiered-pricing')]" position="attributes">
             <attribute name="groups">
                 base.group_user, base.group_portal
             </attribute>
