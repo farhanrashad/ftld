@@ -6,6 +6,7 @@
             </xpath>
         </template>
         
+        
         <!-- add register menu link -->
         <template id="header" inherit_id="website.layout" name="Header Shop Wishlist Link">
             <xpath expr="//header//ul[@id='top_menu']/li[hasclass('divider')]" position="after">
@@ -96,9 +97,9 @@
 -->
         </template>
         <!-- add black  space in menu bar -->
-<!--        
-        <template id="header" inherit_id="web.layout" name="blank menu">
-            <xpath expr="ul[@id='top_menu']/li[hasclass('o_wsale_my_cart')]" position="before">
+        <template id="header" inherit_id="website.layout" name="blank menu">
+            <xpath expr="//header//ul[@id='top_menu']//li[hasclass('divider')]" position="before">
+            
                 <li id="blank-nav-item" class="nav-item blank-nav-item" >
                     
                 </li>
@@ -109,6 +110,5 @@
                 </li>
             </xpath>
         </template>
--->        
     </data>
 </odoo>
