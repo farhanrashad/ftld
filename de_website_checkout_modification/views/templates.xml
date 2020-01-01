@@ -1,0 +1,27 @@
+<odoo>
+    <template id="de_website_checkout_modification_assets_frontend" inherit_id="website.assets_frontend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" type="text/scss" href="/de_website_checkout_modification/static/src/scss/main.scss"/>
+            </xpath>
+        <xpath expr="//script[last()]" position="after">
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" />
+            <script type="text/javascript" src="/de_website_checkout_modification/static/src/js/main.js" />
+        </xpath>
+        
+    </template>
+    
+    <template id="de_website_checkout_payment_tokens_list_inherit" inherit_id="payment.payment_tokens_list">
+        <xpath expr="//div[hasclass('card-body')]" position="attributes">
+            <attribute name="t-attf-class">
+                card-body o_payment_acquirer_select o_payment_form_acq_{{acq.id}} o_payment_form_acq_{{acq.name}}
+            </attribute>
+        </xpath>
+        
+    </template>
+    
+    <template id="de_website_checkout_modification_payment_inherit" inherit_id="website_sale.payment">
+        <xpath expr="//div[@id='payment_method']/form/a/span[1]" position="replace">
+            <span t-if="order.amount_total &gt; 0">Order Now <span class="fa fa-chevron-right"/></span>
+        </xpath>
+    </template>
+</odoo>
